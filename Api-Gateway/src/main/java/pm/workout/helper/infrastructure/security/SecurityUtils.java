@@ -16,7 +16,7 @@ public class SecurityUtils {
         String bearerToken = request.getHeader(AUTH_HEADER);
 
         if (StringUtils.hasLength(bearerToken) && bearerToken.startsWith(AUTH_TOKEN_PREFIX)){
-            return bearerToken.substring(7); //Token to jest 7 liter bo Bearer ma 7 liter
+            return bearerToken.substring(7); 
         }
         return null;
     }

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-//Dostarcza bezpiecznego polaczenia z innymi mikroserwisami
 @Configuration
 public class FeignConfiguration {
     @Bean

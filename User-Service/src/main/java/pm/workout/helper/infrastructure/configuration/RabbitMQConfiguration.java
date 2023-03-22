@@ -18,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class RabbitMQConfiguration {
     @Value("${rabbitmq.exchanges.internal}")
-    private String internalExchange;
+    private final String internalExchange;
 
     @Value("${rabbitmq.queue.notification}")
-    private String notificationQueue;
+    private final String notificationQueue;
 
     @Value("${rabbitmq.routing-keys.internal-notification}")
-    private String internalNotificationRoutingKey;
+    private final String internalNotificationRoutingKey;
 
     private final ConnectionFactory connectionFactory;
 

@@ -1,6 +1,5 @@
 package pm.workout.helper.domain.workout.doc;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class Workout {
     private String workoutId;

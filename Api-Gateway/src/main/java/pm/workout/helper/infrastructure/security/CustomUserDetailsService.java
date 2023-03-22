@@ -14,22 +14,6 @@ import java.util.Set;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-//    @Autowired
-//    private UserService userService;
-//
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        AppUser user = userService.getUserByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User with login "+username+" not found"));
-//
-//        Set<GrantedAuthority> authorities = Set.of(SecurityUtils.convertToAuthority(user.getUserAuthority().name()));
-//        return UserPrincipal.builder()
-//                .user(user)
-//                .id(user.getId())
-//                .username(username)
-//                .password(user.getPassword())
-//                .authorities(authorities)
-//                .build();
-//    }
     @Autowired
     private UserService userService;
 

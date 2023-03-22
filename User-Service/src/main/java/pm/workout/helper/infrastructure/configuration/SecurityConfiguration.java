@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${service.security.secure-key-username}")
-    private String SECURE_KEY_USERNAME;
+    private final String SECURE_KEY_USERNAME;
 
     @Value("${service.security.secure-key-password}")
-    private String SECURE_KEY_PASSWORD;
+    private final String SECURE_KEY_PASSWORD;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(http);
 
         http.csrf().disable();
-        http.headers().frameOptions().disable();//wylaczenie session authentication
+        http.headers().frameOptions().disable();
     }
 
     @Bean

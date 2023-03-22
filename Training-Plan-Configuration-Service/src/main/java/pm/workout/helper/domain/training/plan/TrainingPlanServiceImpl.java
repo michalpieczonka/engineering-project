@@ -62,7 +62,7 @@ class TrainingPlanServiceImpl implements TrainingPlanService{
     @Transactional
     @Override
     public void deleteTrainingPlan(Long trainingPlanId) {
-
+		//todo: implement
     }
 
     @Transactional(readOnly = true)

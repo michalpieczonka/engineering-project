@@ -39,16 +39,11 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private TrainingPlanConfigurationService trainingPlanConfigurationService;
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final TrainingPlanConfigurationService trainingPlanConfigurationService;
+    private final NotificationRepository notificationRepository;
 
     @Transactional
     @Override
@@ -69,6 +64,7 @@ class UserServiceImpl implements UserService {
         return new AppUserDto(appUser.getId(), appUser.getUsername(), appUser.getPassword(), appUser.getEmail(), appUser.getUserAuthority());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetailsDto getUserDetails(long userId) {
         return userRepository.findUserById(userId)

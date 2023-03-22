@@ -30,7 +30,6 @@ public class JwtProviderImpl implements JwtProvider{
     @Value("${app.jwt.expiration-in-ms}")
     private Long JWT_EXPIRATION_TIME_MS;
 
-    //Token jwt generowany na podstawie user info
     @Override
     public String generateJwtToken(UserPrincipal auth, Long userId){
         String authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
@@ -49,8 +48,7 @@ public class JwtProviderImpl implements JwtProvider{
     }
 
 
-    //Przeczytaj header z naglowka http "Authorization"  i stworz obiekt authentcation
-    //Wykorzystuje klucz  symetryczny - ten sam algorytm do zaszyfrowania i zdeszyfrowania tokena
+   //klucz  symetryczny - ten sam algorytm do zaszyfrowania i zdeszyfrowania tokena
     @Override
     public Authentication getAuthentication(HttpServletRequest request) {
        Claims claims = extractClaims(request);
@@ -94,7 +92,6 @@ public class JwtProviderImpl implements JwtProvider{
     }
 
     //Na endpointach waliduj token z headera
-
     @Override
     public boolean isTokenValid(HttpServletRequest request) {
         Claims claims = extractClaims(request);
