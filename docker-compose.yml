@@ -1,0 +1,157 @@
+services:
+  postgres:
+    container_name: postgres
+    image: michalpieczonka4/whelperdatapgdb:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      PGDATA: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - spring
+
+  mongodb:
+    image: michalpieczonka4/whelperdbmongo:latest
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    networks:
+        - mongodb
+  mongo-express:
+    image: mongo-express
+    container_name: mongoexpress
+    restart: always
+    ports:
+      - 8099:8099
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+
+  eureka-server:
+    image: michalpieczonka4/workout-helper-eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+
+  api-gateway:
+    image: michalpieczonka4/workout-helper-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - eureka-server
+
+  user-service:
+    image: michalpieczonka4/workout-helper-user-service:latest
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - postgres
+      - rabbitmq
+
+  workout-service:
+    image: michalpieczonka4/workout-helper-workout-service:latest
+    container_name: workout-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - mongodb
+    depends_on:
+      - eureka-server
+      - mongodb
+
+  training-plan-conf-service:
+    image: michalpieczonka4/workout-helper-training-plan-conf-service:latest
+    container_name: training-plan-configuration-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - postgres
+
+  notification-service:
+    image: michalpieczonka4/workout-helper-notification-service:latest
+    container_name: notification-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - eureka-server
+      - postgres
+      - rabbitmq
+  user-frontend-service:
+    image: michalpieczonka4/workout-helper-frontend:latest
+    container_name:  user-frontend-service
+    ports:
+      - "3000:3000"
+networks:
+  postgres:
+    driver: bridge
+  spring:
+    driver: bridge
+  mongodb:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+  data:
