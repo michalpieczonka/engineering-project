@@ -1,0 +1,1 @@
+![architectureDiagram](./diagram.png) <br>
